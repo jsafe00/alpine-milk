@@ -1,0 +1,123 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+        <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    </head>
+    <body>
+        <div x-data="{name: 'Saf'}" class="bg-green-400 m-4 p-4 rounded">
+            <span x-text="name"></span>
+        </div>
+        <div x-data="{message: 'Hello Saf'}" class="bg-slate-200 m-4 p-4 rounded">
+            <span x-text="message"></span>
+        </div>
+        <br />
+
+        <div x-data="{first: 0, second: 0 }">
+            <input type="text" x-model.number="first"> + 
+            <input type="text" x-model.number="second"> = 
+            <output x-text="first + second">
+
+            </output>
+        </div>
+        <!-- x-bind - change an elements attributes based on changes in your app's state, user input, or other events -->
+        <div x-data="{
+            selectedImageUrl : 'https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?auto=format&fit=crop&q=80&w=1974&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            show: true,
+            inputValue: 'Hello'
+          }">
+            <img class="w-96 h-96" :class="{'hidden' : !show}" :src="selectedImageUrl"> <br />
+            <input type="text" :value="inputValue" :style="{color: 'red'}">
+        </div>
+        <br />
+        <!-- x-model any changes to the input will autoupdate the corresponding property and vice versa-->
+        <div x-data="{message: 'Hellow Saf'}">
+            <input type="text" x-model="message">
+            <p x-text="message" class="m-2 p-2 bg-slate-200"></p>
+        </div>
+        <div class="max-w-md mx-auto space-y-2" x-data="{ myColor: 'gray'}" >
+            <div class="w-24 h-24 rounded" :class="'bg-' + myColor + '-500'"></div>
+            <select x-model="myColor">
+                <option value="gray">Gray</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+                <option value="red">Red</option>
+            </select>
+        </div>
+        <!-- x-show (toggle the visibility) and x-if (toggle the existence of an element in the DOM )-->
+        <!-- x-show-->
+        <div x-data="{ show: false}">
+            <button @click="show = ! show">
+                Toggle Show
+            </button>
+            <div x-show="show">
+                Toggle Show
+            </div>
+        </div>
+
+        <div x-data="{show: false}">
+            <button @click="show = ! show" x-text="show ? 'Hide' : 'Show'">Show Menu</button>
+
+            <div x-show="show">
+                <a href="/" style="display: block">Home</a>
+            </div>
+
+        </div>
+
+        <!--x-if -->
+        <div x-data="{ showIfExample: false }">
+            <button @click="showIfExample = ! showIfExample">
+                Toggle If
+            </button>
+            <template x-if="showIfExample">
+                <div>
+                    Toggle If
+                </div>
+            </template>
+        </div>
+        <!-- x-on-->
+        <section x-data>
+            <button x-on:click="alert('hello world')"> Say Hi</button>
+        </section>
+        <section x-data="{isOpen: false}">
+
+                <button @click="isOpen = ! isOpen" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown button 
+                    <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <!-- Dropdown menu using x-on-->
+                <div x-show="isOpen" id="dropdown" @click.outside="isOpen = false"
+                    class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                    </li>
+                    </ul>
+                </div>
+        </section>
+        <section x-data>
+            <button @click="$refs.text.remove()">
+                Remove text
+            </button>
+            <span x-ref="text">Helloooo Saf</span>
+        </section>
+        <section x-data="{ maxLength: 100}">
+            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your message</label>
+            <textarea id="message" rows="4" x-ref="message" @keyup="maxLength = 100 - $refs.message.value.length" 
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+            placeholder="Write your thoughts here..."></textarea>
+        <span x-text="maxLength + 'Characters remaining'"></span>
+        </section>
+    </body>
+</html>

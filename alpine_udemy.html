@@ -1,0 +1,126 @@
+<html>
+<head>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+    <h1 x-data="{ message: 'I ❤️ Alpine' }" x-text="message"></h1>
+    <!--x-data -->
+    <div x-data="{message : 'hello'}">
+        <button x-data="{message : 'Hi saf'}" @click="alert(message)"> Say Hi Saf</button>
+        <button @click="alert(message)"> Say Hello</button>
+    </div>
+    <!-- x-bind -->
+    <div x-data="{message: 'Hello'}">
+        <h1 x-text="message"></h1>
+        <input type="text" x-bind:placeholder="message">
+        <button @click="message='Hi'">Say Hi</button>
+        <button @click="message='Bye'">Say Bye</button> 
+    </div>
+    <!--x-model-->
+    <div x-data="{message: 'Hello'}">
+        <h1 x-text="message"></h1>
+        <input type="text" x-model="message">
+        <button @click="message='Hi'">Say Hi</button>
+        <button @click="message='Bye'">Say Bye</button> 
+    </div>
+    <br />
+    <!-- x-model modifiers-->
+    <div x-data="{first: 0, second: 0 }">
+        <input type="number" x-model.number.lazy="first"> +
+        <input type="number" x-model.number.lazy="second"> =
+        <span x-text="first + second"></span>
+    </div>
+    <br />
+    <!--x-show -->
+    <div x-data="{show: false, page: ''}">
+        <button @click="show = !show">Dropdown</button>
+
+        <div x-show="show">
+            <button @click="page =''"> Home</button>
+            <button @click="page ='settings'">Settings</button>
+            <button @click="page ='profile'">Profile</button>
+        </div>
+
+        <h1 x-show="page === ''">Home</h1>
+        <h1 x-show="page === 'settings'">Settings</h1>
+        <h1 x-show="page === 'profile'">Profile</h1>
+    </div>
+    <br />
+    <!-- x-if-->
+    <div x-data="{page: ''}">
+            <button @click="page =''"> Home</button>
+            <button @click="page ='settings'">Settings</button>
+            <button @click="page ='profile'">Profile</button>
+
+            <template x-if="page === ''">
+                <h1>Home</h1>
+            </template>
+            <template x-if="page ==='settings'">
+                <h1>Settings</h1>
+            </template>
+            <template x-if="page === 'profile'">
+                <h1>Profile</h1>
+            </template>
+    </div>
+    <!-- regular JS directives-->
+    <div x-data="{page: 'home'}">
+        <button @click="page = 'home'">Home</button>
+        <button @click="page = 'settings'">Settings</button>
+        <button @click="page = 'profile'">Profile</button>
+
+        <h1 x-text="page.charAt(0).toUpperCase() + page.slice(1)"></h1>
+    </div>
+    <!--x-for render templates multiple times-->
+    <ul x-data="{users: ['You', 'Me', 'Someone Else'] }">
+        <template x-for ="user in users">
+            <li x-text="user"></li>
+        </template>
+    </ul>
+    <br />
+    <!-- x-for objects in for loops and binding a key-->
+    <ul x-data="{users: [
+        {id: 1, first_name: 'James'},
+        {id: 2, first_name: 'John'},
+        {id: 3, first_name: 'Jane'},
+        {id: 4, first_name: 'Jane'},    
+    ]}">
+        <template x-for="user in users" :key="user.id">
+            <li x-text="user.first_name"></li>
+        </template>
+    </ul>
+    <br />
+    <!-- x-init - api call-->
+    <ul 
+    x-data="{users: [] }"
+    x-init="users =await fetch('https://reqres.in/api/users')
+        .then(response => response.json())
+        .then(result => result.data)"
+    >
+        <template x-for="user in users" :key="user.id">
+            <li x-text="user.first_name"></li>
+        </template>
+    </ul>
+    <br />
+    <!-- extracting outline in JS-->
+    <ul 
+    x-data="usersList"
+    x-init="users = await fetchUsers()"
+    >
+        <template x-for="user in users" :key="user.id">
+            <li x-text="user.first_name"></li>
+        </template>
+    </ul>
+    <script>
+        const usersList = () => {
+        return {
+            users: [],
+            fetchUsers: () => {
+            return fetch('https://reqres.in/api/users')
+                .then(response => response.json())
+                .then(result => result.data);
+            }
+        }
+        }
+    </script>
+</body>
+</html>
